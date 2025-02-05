@@ -8,6 +8,7 @@ if ! ssh-add -l ; then
 fi
 
 SCRIPT_PATH="$(dirname "$(realpath "$0")")"
-MODEL_PATH=$(yq -r .storage.model_path $SCRIPT_PATH/config.yml)
-cp -r $MODEL_PATH $SCRIPT_PATH/models
+MODEL_PATH=$(yq -r .system_model_path $SCRIPT_PATH/config.yml)
+rm -r $SCRIPT_PATH/weights
+cp -r $MODEL_PATH $SCRIPT_PATH/weights
 podman build --format docker -t logo . --network host --build-arg SSH_AUTH_SOCK=$SSH_AUTH_SOCK --volume "${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}"

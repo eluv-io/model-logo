@@ -1,10 +1,11 @@
 device: cuda
 
+# where the weights are located for build time
+system_model_path: /eluvio/ml/models/logo
+
 storage:
-  system:
-    model_path: /eluvio/ml/models/logo
-  container:
-    model_path: models 
+  # where the weights are found at runtime
+  weights: weights
 runtime:
   default:
     fps: 4

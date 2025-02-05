@@ -109,7 +109,7 @@ class LogoRecognition(FrameModel):
     def _add_args(self):
         args = DictToClass(config["inference"])
 
-        data_path = os.path.join(self.model_input_path, 'logo')
+        data_path = self.model_input_path
         args.yolo_weights = os.path.join(data_path, args.yolo_weights)
         args.yolo_cfg = os.path.join(data_path, args.yolo_cfg)
         args.resnext_weights = os.path.join(
@@ -237,7 +237,7 @@ class LogoRecognition(FrameModel):
     
     def tag(self, frame: np.ndarray) -> List[FrameTag]:
         # convert from rgb to bgr
-        #frame = np.expand_dims(frame[:, :, ::-1], axis=0)
+        frame = frame[:, :, ::-1]
         frame = np.expand_dims(frame, axis=0)
         
         batch_yolo_preds = self.yolo_detect(frame, self.detect_thres, self.nms_iou_thres)

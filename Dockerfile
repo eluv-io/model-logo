@@ -9,20 +9,20 @@ RUN \
 
 SHELL ["conda", "run", "-n", "logo", "/bin/bash", "-c"]
 
-COPY logo ./logo
-COPY config.yml run.py setup.py config.py .
-
-COPY models ./models
-
 # Create the SSH directory and set correct permissions
 RUN mkdir -p /root/.ssh && chmod 700 /root/.ssh
 
 # Add GitHub to known_hosts to bypass host verification
 RUN ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 
+COPY logo ./logo
+COPY config.yml run.py setup.py config.py .
+
 ARG SSH_AUTH_SOCK
 ENV SSH_AUTH_SOCK ${SSH_AUTH_SOCK}
 
 RUN /opt/conda/envs/logo/bin/pip install .
+
+COPY weights ./weights
 
 ENTRYPOINT ["/opt/conda/envs/logo/bin/python", "run.py"]
