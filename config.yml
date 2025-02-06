@@ -1,7 +1,7 @@
 device: cuda
 
 # where the weights are located for build time
-system_model_path: /eluvio/ml/models/logo
+system_model_path: /ml/models/logo
 
 storage:
   # where the weights are found at runtime

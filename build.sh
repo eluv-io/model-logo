@@ -7,8 +7,12 @@ if ! ssh-add -l ; then
     exit 1
 fi
 
+set -e
+
 SCRIPT_PATH="$(dirname "$(realpath "$0")")"
 MODEL_PATH=$(yq -r .system_model_path $SCRIPT_PATH/config.yml)
-rm -r $SCRIPT_PATH/weights
+
 cp -r $MODEL_PATH $SCRIPT_PATH/weights
-podman build --format docker -t logo . --network host --build-arg SSH_AUTH_SOCK=$SSH_AUTH_SOCK --volume "${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}"
+rsync --progress --update --times --recursive --links --delete $MODEL_PATH $SCRIPT_PATH/weights
+
+podman build --format docker -t logo . --network host --build-arg SSH_AUTH_SOCK=/tmp/ssh-auth-sock --volume "${SSH_AUTH_SOCK}:/tmp/ssh-auth-sock"
